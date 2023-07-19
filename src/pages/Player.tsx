@@ -3,13 +3,17 @@ import { ChatCircleDots } from 'phosphor-react';
 import { Header } from '../components/Header';
 import { Video } from '../components/Video';
 import { Module } from '../components/Module';
+import { useAppSelector } from '../store';
 
 export function Player() {
+  const modules = useAppSelector(state => {
+    return state.player.course.modules
+  })
+
   return (
     <div className="h-screen bg-zinc-950 text-zinc-50 flex justify-center items-center">
       <div className="flex w-[1100px] flex-col gap-6">
         <div className="flex items-center justify-between">
-          {/*HEADER */}
           <Header />
 
           <button className='flex items-center gap-2 rounded bg-violet-500 px-3 py-2 text-sm font-medium text-white hover:bg-violet-600'>
@@ -24,8 +28,16 @@ export function Player() {
           </div>
 
           <aside className='w-80 absolute top-0 bottom-0 right-0 border-l border-zinc-800 bg-zinc-900 h-[600px] overflow-y-scroll scrollbar scrollbar-thin scrollbar-track-zinc-900 scrollbar-thumb-zinc-800 divide-y-2 divide-zinc-900'>
-            <Module moduleIndex={0} title='Desvendando o redux' amountOfLessons={3}/>
-            <Module moduleIndex={1} title='Desvendando o redux' amountOfLessons={3}/>
+            {modules.map((module, index) => {
+              return (
+                <Module
+                  key={module.id}
+                  moduleIndex={index}
+                  title={module.title}
+                  amountOfLessons={module.lessons.length}
+                />
+              )
+            })}
           </aside>
         </main>
       </div>

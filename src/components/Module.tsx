@@ -1,3 +1,5 @@
+import * as Colapsible from '@radix-ui/react-collapsible';
+
 import { CaretDown } from "phosphor-react";
 import { Lesson } from "./Lesson";
 
@@ -7,10 +9,10 @@ interface ModuleProps {
   amountOfLessons: number;
 }
 
-export function Module({moduleIndex, title, amountOfLessons}: ModuleProps) {
+export function Module({ moduleIndex, title, amountOfLessons }: ModuleProps) {
   return (
-    <div >
-      <button className='flex w-full items-center gap-3 bg-zinc-800 p-4'>
+    <Colapsible.Root className='group'>
+      <Colapsible.Trigger className='flex w-full items-center gap-3 bg-zinc-800 p-4'>
         <div className='flex h-10 w-10 rounded-full items-center justify-center bg-zinc-950 text-xs'>
           {moduleIndex + 1}
         </div>
@@ -20,13 +22,15 @@ export function Module({moduleIndex, title, amountOfLessons}: ModuleProps) {
           <span className='text-xs text-zinc-400'>{amountOfLessons} aulas</span>
         </div>
 
-        <CaretDown className='w-5 h-5 ml-auto text-zinc-400' />
-      </button>
+        <CaretDown className='w-5 h-5 ml-auto text-zinc-400 group-data-[state=open]:rotate-180 transition-transform' />
+      </Colapsible.Trigger>
 
-      <nav className='relative flex flex-col gap-4 p-6'>
-        <Lesson title="Fundamentos do Redux" duration="09:30"/>
-      </nav>
+      <Colapsible.Content>
+        <nav className='relative flex flex-col gap-4 p-6'>
+          <Lesson title="Fundamentos do Redux" duration="09:30" />
+        </nav>
+      </Colapsible.Content>
 
-    </div>
+    </Colapsible.Root>
   )
 }

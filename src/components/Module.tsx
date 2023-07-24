@@ -1,7 +1,6 @@
 import * as Colapsible from '@radix-ui/react-collapsible';
-import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../store';
+import { useAppDispatch, useAppSelector } from '../store';
 import { play } from '../store/slices/player';
 
 import { CaretDown } from "phosphor-react";
@@ -14,7 +13,7 @@ interface ModuleProps {
 }
 
 export function Module({ moduleIndex, title, amountOfLessons }: ModuleProps) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {currentModuleIndex, currentLessonIndex} = useAppSelector(state => {
     const {currentModuleIndex, currentLessonIndex} = state.player;

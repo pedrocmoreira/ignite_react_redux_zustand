@@ -1,28 +1,28 @@
-import { ChatCircleDots } from 'phosphor-react';
+import { MessageCircle } from "lucide-react";
 
-import { Header } from '../components/Header';
-import { Video } from '../components/Video';
-import { Module } from '../components/Module';
-import { useAppDispatch, useAppSelector } from '../store';
-import { loadCourse, useCurrentLesson } from '../store/slices/player';
-import { useEffect } from 'react';
+import { Header } from "../components/Header";
+import { Video } from "../components/Video";
+import { Module } from "../components/Module";
+import { useEffect } from "react";
+import { useCurrentLesson, useStore } from "../zustand-store";
 
 export function Player() {
-  const dispatch = useAppDispatch();
+  const { course, load } = useStore(store => {
+    return {
+      course: store.course,
+      load: store.load
+    }
+  })
 
-  const modules = useAppSelector(state => {
-    return state.player.course?.modules
-  });
-
-  const { currentLesson } = useCurrentLesson();
+  const { currentLesson } = useCurrentLesson()
 
   useEffect(() => {
-    dispatch(loadCourse());
+    void load();
   }, []);
 
   useEffect(() => {
     if (currentLesson) {
-      document.title = `${currentLesson.title} | React + Redux + Zustand`
+      document.title = `Assistindo: ${currentLesson.title}`
     }
   }, [currentLesson]);
 
@@ -32,19 +32,18 @@ export function Player() {
         <div className="flex items-center justify-between">
           <Header />
 
-          <button className='flex items-center gap-2 rounded bg-violet-500 px-3 py-2 text-sm font-medium text-white hover:bg-violet-600'>
-            <ChatCircleDots className='w-4 h-4' />
+          <button className="flex items-center gap-2 rounded bg-violet-500 px-3 py-2 text-sm font-medium text-white hover:bg-violet-600">
+            <MessageCircle className="w-4 h-4" />
             Deixar feedback
           </button>
         </div>
 
-        <main className='relative flex overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 shadow pr-80'>
-          <div className='flex-1'>
+        <main className="relative flex overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 shadow pr-80">
+          <div className="flex-1">
             <Video />
           </div>
-
-          <aside className='w-80 absolute top-0 bottom-0 right-0 border-l border-zinc-800 bg-zinc-900 h-[600px] overflow-y-scroll scrollbar scrollbar-thin scrollbar-track-zinc-900 scrollbar-thumb-zinc-800 divide-y-2 divide-zinc-900'>
-            {modules && modules.map((module, index) => {
+          <aside className="w-80 absolute top-0 bottom-0 right-0 border-l divide-y-2 divide-zinc-900 border-zinc-800 bg-zinc-900 overflow-y-scroll scrollbar scrollbar-thin scrollbar-track-zinc-950 scrollbar-thumb-zinc-800">
+            {course?.modules && course?.modules.map((module, index) => {
               return (
                 <Module
                   key={module.id}
@@ -58,5 +57,5 @@ export function Player() {
         </main>
       </div>
     </div>
-  )
+  );
 }
